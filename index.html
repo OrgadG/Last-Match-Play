@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#172722">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Last Match">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="description" content="A quiet game of strategy. Take the last match to win.">
+  <title>Last Match</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMyMDMzMjkiLz48ZyB0cmFuc2Zvcm09InJvdGF0ZSgyNCAzMiAzMikiPjxyZWN0IHg9IjIxIiB5PSIxOCIgd2lkdGg9IjciIGhlaWdodD0iMzYiIHJ4PSIyIiBmaWxsPSIjZThjMzhiIi8+PHJlY3QgeD0iMjIiIHk9IjIwIiB3aWR0aD0iMiIgaGVpZ2h0PSIzMSIgcng9IjEiIGZpbGw9IiNmNWRkYjMiLz48cmVjdCB4PSIxOSIgeT0iOSIgd2lkdGg9IjExIiBoZWlnaHQ9IjE2IiByeD0iNSIgZmlsbD0iI2U5OTc2NSIvPjxyZWN0IHg9IjM4IiB5PSIyMSIgd2lkdGg9IjciIGhlaWdodD0iMzMiIHJ4PSIyIiBmaWxsPSIjY2ZhNjZmIi8+PHJlY3QgeD0iMzkiIHk9IjIzIiB3aWR0aD0iMiIgaGVpZ2h0PSIyOCIgcng9IjEiIGZpbGw9IiNlZWQxYTAiLz48cmVjdCB4PSIzNiIgeT0iMTMiIHdpZHRoPSIxMSIgaGVpZ2h0PSIxNiIgcng9IjUiIGZpbGw9IiNiOTZkNGQiLz48L2c+PC9zdmc+">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="game.js"></script>
+  <script defer src="sound.js"></script>
+  <script defer src="scores.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="offline.js"></script>
+</head>
+<body>
+  <main id="game-shell" class="game-shell">
+    <header><div class="brand-mark" aria-hidden="true">✳</div><p class="eyebrow">A LITTLE FIRE. A LITTLE STRATEGY.</p><h1>Last Match<span>.</span></h1><span id="active-rule" role="status" aria-live="polite" aria-label="Last Match Wins">WINS</span></header>
+    <button id="sound-toggle" class="compact-toggle icon-button" aria-label="Mute sound" aria-pressed="true"><span aria-hidden="true">🔊</span></button>
+    <div class="controls play-controls">
+      <div id="scoreboard" class="scoreboard" role="status" aria-live="polite" aria-atomic="true">
+        <span id="player-0-score" class="player-score" data-player="human"><span id="player-0-name" class="player-name">You</span></span>
+        <span class="score-numbers" aria-hidden="true"><strong id="player-0-wins">0</strong><span class="score-divider">–</span><strong id="player-1-wins">0</strong></span>
+        <span id="player-1-score" class="player-score" data-player="computer"><span id="player-1-name" class="player-name">Piro</span></span>
+      </div>
+      <button id="pause-game" class="text-button" aria-label="Pause" aria-haspopup="dialog"><span class="control-reserve" aria-hidden="true">↻ <span>Game Setup</span></span><span class="pause-label">Pause</span></button>
+    </div>
+    <button id="new-game" class="text-button header-setup" aria-haspopup="dialog">Game Setup</button>
+    <section class="table" aria-label="Matchstick game">
+
+
+      <div id="board" class="board" aria-label="Choose matches from one row"></div>
+      <div id="result" class="result" hidden><h2 id="result-title"></h2><p id="result-detail"></p><button id="play-again" class="primary">Play again <span aria-hidden="true">↗</span></button></div>
+      <div id="start-announcement" class="start-announcement" role="status" aria-live="polite" hidden></div>
+      <div id="celebration" aria-hidden="true"></div>
+    </section>
+    <button id="help-toggle" class="help-toggle" aria-haspopup="dialog">How to Play</button>
+    <dialog id="pause-dialog" aria-labelledby="pause-title"><h2 id="pause-title">Game paused</h2><div class="pause-actions"><button id="resume-game" class="primary">Resume</button><button id="cancel-game" class="text-button">Cancel Game</button></div></dialog>
+    <dialog id="instructions" aria-labelledby="help-title">
+      <h2 id="help-title" tabindex="-1" autofocus>How to Play Last Match</h2>
+      <h3>The Goal</h3><p>Outsmart your opponent by striking matches from the board. You can play against <strong>Piro</strong> or challenge a friend on the same device.</p>
+      <h3>Taking Your Turn</h3><ul>
+        <li>Strike off any number of matches from <strong>one row</strong>.</li>
+        <li>Swipe across matches with your finger, or click and drag with your mouse.</li>
+        <li>Drag backward to deselect matches. Drag all the way back to cancel your move.</li>
+        <li>Release to strike the selected matches.</li>
+        <li>Players alternate turns until no matches remain.</li>
+      </ul>
+      <h3>Last Match Wins or Loses?</h3><p>Choose your rule in Game Setup:</p><ul>
+        <li><strong>Last Match Wins:</strong> Strike the final match to win.</li>
+        <li><strong>Last Match Loses:</strong> Strike the final match and lose.</li>
+      </ul><p>The final move may strike one or several matches.</p>
+      <h3>Split On or Off?</h3>
+      <p><strong>Split Off:</strong> Remaining matches slide together after each move. You can strike matches anywhere within one row.</p>
+      <p><strong>Split On:</strong> Removing matches can create separate groups within a row. Those groups stay apart, and you may strike matches from only one group per turn. Matches selected within a group must be consecutive.</p>
+      <h3>Game Setup</h3><ul>
+        <li><strong>1 Player:</strong> Challenge Piro at Beginner or Expert difficulty.</li>
+        <li><strong>2 Players:</strong> Play against a friend on the same screen.</li>
+        <li><strong>Board Config:</strong> Choose 3–5–7, 4–6–8, 5–7–9, or Random.</li>
+        <li><strong>Split:</strong> Turn splitting On or Off.</li>
+        <li><strong>Last Match:</strong> Choose whether taking the final match wins or loses.</li>
+      </ul>
+      <h3>Turns and Scores</h3><p>The highlighted name on the scoreboard shows whose turn it is. Orange represents Player 1; blue represents Player 2 or Piro.</p>
+      <p>The numbers beside the names show games won. The starting player alternates each new game.</p>
+      <h3>Pause or Cancel</h3><p>Press <strong>Pause</strong> to temporarily stop the game.</p><ul>
+        <li><strong>Resume:</strong> Continue where you left off.</li>
+        <li><strong>Cancel Game:</strong> End the current game without changing the scores.</li>
+      </ul>
+      <h3>A Little Strategy</h3><p>There is a mathematical strategy behind Last Match. Watch how the board changes and look for patterns. Every move matters!</p>
+      <p><strong>Ready? Open Game Setup, choose your options, and start playing.</strong></p>
+      <button id="help-close" class="primary">Close</button>
+    </dialog>
+    <dialog id="setup" aria-labelledby="setup-title">
+      <h2 id="setup-title">New Game</h2>
+      <form id="setup-form">
+        <label class="setup-field">Game Mode<select id="setup-mode"><option value="computer">1 Player</option><option value="local">2 Players</option></select></label>
+        <label id="difficulty-field" class="setup-field">Difficulty<select id="setup-difficulty"><option value="beginner">Beginner</option><option value="expert">Expert</option></select></label>
+        <label class="setup-field">Last Match Rule<select id="setup-rule" aria-describedby="setup-explanation"><option value="wins">Last Match Wins</option><option value="loses">Last Match Loses</option></select></label>
+        <p id="setup-explanation">Strike the final match to win.</p>
+        <label class="setup-field">Board Config<select id="setup-board"><option value="3-5-7">3–5–7</option><option value="4-6-8">4–6–8</option><option value="5-7-9">5–7–9</option><option value="random">Random</option></select></label>
+        <label class="setup-field">Split On/Off<select id="setup-split"><option value="off">Off</option><option value="on">On</option></select></label>
+        <label class="setup-field">Appearance<select id="setup-theme"><option value="dark">Dark</option><option value="light">Light</option></select></label>
+        <div id="names-field" hidden>
+          <label class="setup-field">Player 1 name<input id="player-one" type="text" maxlength="24" placeholder="Player 1" autocomplete="off"></label>
+          <label class="setup-field">Player 2 name<input id="player-two" type="text" maxlength="24" placeholder="Player 2" autocomplete="off"></label>
+        </div>
+        <button id="reset-scores" class="quiet-button" type="button">Reset Scores</button>
+        <div id="reset-confirmation" role="group" aria-labelledby="reset-description" hidden>
+          <p id="reset-description"></p>
+          <button id="reset-cancel" type="button" class="compact-toggle">Keep scores</button>
+          <button id="reset-confirm" type="button" class="compact-toggle">Confirm reset</button>
+        </div>
+        <div class="setup-actions"><button id="setup-cancel" class="text-button" type="button">Cancel</button><button id="start-game" class="primary" type="submit">Start Game <span aria-hidden="true">↗</span></button></div>
+      </form>
+    </dialog>
+  </main>
+</body>
+</html>
